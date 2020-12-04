@@ -34,8 +34,7 @@ namespace BadConnection
         private void ClearData()
         {
             ITEM_textbox.Text = "";
-            AMOUNT_num.Text = "";
-            PRICE_num.Text = "";
+            IMAGESOURCE_textbox.Text = "";
         }
 
         private void DisplayDataGrid()
@@ -48,33 +47,114 @@ namespace BadConnection
             connection.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            if (ITEM_textbox.Text != "" && ITEM_textbox.Text != null && AMOUNT_num.Text != "" && AMOUNT_num.Text != null && PRICE_num.Text != "" && PRICE_num.Text != null)
+            try
             {
-                connection.Open();
-                command = new SqlCommand("INSERT INTO dbo.MyTable(Item, Amount, Price) VALUES(@Item, @Amount, @Price)", connection);
-                command.Parameters.AddWithValue("@Item", ITEM_textbox.Text);
-                command.Parameters.AddWithValue("@Amount", AMOUNT_num.Text);
-                command.Parameters.AddWithValue("@Price", PRICE_num.Text.Replace(",", "."));
-                command.CommandType = CommandType.Text;
-                command.ExecuteNonQuery();
-                connection.Close();
-                ClearData();
+                if (IMAGESOURCE_textbox.Text != "" && IMAGESOURCE_textbox.Text != null)
+                {
+                    IMAGECANVAS_picbox.LoadAsync(IMAGESOURCE_textbox.Text);
+                }
+                if (ITEM_textbox.Text != "" && ITEM_textbox.Text != null && AMOUNT_num.Text != "" && AMOUNT_num.Text != null && PRICE_num.Text != "" && PRICE_num.Text != null && IMAGESOURCE_textbox.Text != "" && IMAGESOURCE_textbox.Text != null)
+                {
+                    connection.Open();
+                    command = new SqlCommand("INSERT INTO dbo.MyTable(Item, Amount, Price, Image) VALUES(@Item, @Amount, @Price, @Image)", connection);
+                    command.Parameters.AddWithValue("@Item", ITEM_textbox.Text);
+                    command.Parameters.AddWithValue("@Amount", AMOUNT_num.Text);
+                    command.Parameters.AddWithValue("@Price", PRICE_num.Text.Replace(",", "."));
+                    command.Parameters.AddWithValue("@Image", IMAGESOURCE_textbox.Text);
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                    ClearData();
+                }
+                DisplayDataGrid();
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Incorrect image URL!");
+            }
+        }
+
+        private async void BTN_change_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (IMAGESOURCE_textbox.Text != "" && IMAGESOURCE_textbox.Text != null)
+                {
+                    IMAGECANVAS_picbox.LoadAsync(IMAGESOURCE_textbox.Text);
+                }
+                if (ITEM_textbox.Text != "" && ITEM_textbox.Text != null && AMOUNT_num.Text != "" && AMOUNT_num.Text != null && PRICE_num.Text != "" && PRICE_num.Text != null)
+                {
+                    connection.Open();
+                    command = new SqlCommand("UPDATE dbo.MyTable SET Item = @Item, Amount = @Amount, Price = @Price, Image = @Image WHERE Id = @Id", connection);
+                    command.Parameters.AddWithValue("@Item", ITEM_textbox.Text);
+                    command.Parameters.AddWithValue("@Amount", AMOUNT_num.Text);
+                    command.Parameters.AddWithValue("@Price", PRICE_num.Text.Replace(",", "."));
+                    command.Parameters.AddWithValue("@Image", IMAGESOURCE_textbox.Text);
+                    command.Parameters.AddWithValue("@Id", ID);
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                    ClearData();
+                }
+                DisplayDataGrid();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Incorrect image URL!");
+            }
+        }
+
+        private async void TABLE_datagrid_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            try
+            {
+                ID = Convert.ToInt32(TABLE_datagrid.Rows[e.RowIndex].Cells[0].Value.ToString());
+                ITEM_textbox.Text = TABLE_datagrid.Rows[e.RowIndex].Cells[1].Value.ToString();
+                AMOUNT_num.Text = TABLE_datagrid.Rows[e.RowIndex].Cells[2].Value.ToString();
+                PRICE_num.Text = TABLE_datagrid.Rows[e.RowIndex].Cells[3].Value.ToString();
+
+                command = new SqlCommand("SELECT Image FROM dbo.MyTable WHERE Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", ID);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        IMAGESOURCE_textbox.Text = reader["Image"].ToString();
+                    }
+                    connection.Close();
+                }
+                IMAGECANVAS_picbox.LoadAsync(IMAGESOURCE_textbox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("You have chosen a empty row!");
+            }
+        }
+
+        private void BTN_delete_Click(object sender, EventArgs e)
+        {
+            connection.Open();
+            command = new SqlCommand("DELETE FROM dbo.MyTable WHERE Id = @Id", connection);
+            command.Parameters.AddWithValue("@Id", ID);
+            command.CommandType = CommandType.Text;
+            command.ExecuteNonQuery();
+            connection.Close();
+            ClearData();
             DisplayDataGrid();
         }
 
-        private void BTN_change_Click(object sender, EventArgs e)
+        private void BTN_deleteAll_Click(object sender, EventArgs e)
         {
-        }
-
-        private void TABLE_datagrid_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            ID = Convert.ToInt32(TABLE_datagrid.Rows[e.RowIndex].Cells[0].Value.ToString());
-            ITEM_textbox.Text = TABLE_datagrid.Rows[e.RowIndex].Cells[1].Value.ToString();
-            AMOUNT_num.Text = TABLE_datagrid.Rows[e.RowIndex].Cells[2].Value.ToString();
-            PRICE_num.Text = TABLE_datagrid.Rows[e.RowIndex].Cells[3].Value.ToString();
+            connection.Open();
+            command = new SqlCommand("TRUNCATE TABLE dbo.MyTable", connection);
+            command.CommandType = CommandType.Text;
+            command.ExecuteNonQuery();
+            connection.Close();
+            ClearData();
+            DisplayDataGrid();
         }
     }
 }
