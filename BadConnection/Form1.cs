@@ -22,12 +22,23 @@ namespace BadConnection
             InitializeComponent();
             connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\JeF11037\BadConnection\BadConnection\AppData\MyDB.mdf;Integrated Security=True");
             DisplayDataGrid();
+
+            command = new SqlCommand("SELECT CategoryID FROM dbo.MyTable", connection);
+            connection.Open();
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    CATEGORY_cb.Items.Add(reader["CategoryID"].ToString());
+                }
+                connection.Close();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'myDBDataSet.Table' table. You can move, or remove it, as needed.
-            this.tableTableAdapter.Fill(this.myDBDataSet.Table);
+            //this.tableTableAdapter.Fill(this.myDBDataSet.Table);
 
         }
 
@@ -35,6 +46,7 @@ namespace BadConnection
         {
             ITEM_textbox.Text = "";
             IMAGESOURCE_textbox.Text = "";
+            CATEGORY_cb.Text = "";
         }
 
         private void DisplayDataGrid()
@@ -155,6 +167,25 @@ namespace BadConnection
             connection.Close();
             ClearData();
             DisplayDataGrid();
+        }
+
+        private void CATEGORY_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cm = (ComboBox)sender;
+
+            connection.Open();
+            DataTable tbl = new DataTable();
+            adapter = new SqlDataAdapter("SELECT * FROM dbo.MyTable WHERE Amount = @Amount", connection);
+            adapter.SelectCommand.Parameters.AddWithValue("@Amount", cm.SelectedItem);
+            adapter.Fill(tbl);
+            TABLE_datagrid.DataSource = tbl;
+            connection.Close();
+        }
+
+        private void CLEAR_btn_Click(object sender, EventArgs e)
+        {
+            DisplayDataGrid();
+            ClearData();
         }
     }
 }

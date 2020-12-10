@@ -50,6 +50,9 @@
             this.IMAGECANVAS_picbox = new System.Windows.Forms.PictureBox();
             this.IMAGESOURCE_textbox = new System.Windows.Forms.TextBox();
             this.IMAGESOURCE_lbl = new System.Windows.Forms.Label();
+            this.CB_lbl = new System.Windows.Forms.Label();
+            this.CATEGORY_cb = new System.Windows.Forms.ComboBox();
+            this.CLEAR_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TABLE_datagrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myDBDataSet)).BeginInit();
@@ -73,7 +76,7 @@
             this.ADD_btn.BackColor = System.Drawing.Color.Wheat;
             this.ADD_btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ADD_btn.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.ADD_btn.Location = new System.Drawing.Point(118, 393);
+            this.ADD_btn.Location = new System.Drawing.Point(117, 460);
             this.ADD_btn.Name = "ADD_btn";
             this.ADD_btn.Size = new System.Drawing.Size(94, 32);
             this.ADD_btn.TabIndex = 1;
@@ -206,7 +209,7 @@
             this.change_btn.BackColor = System.Drawing.Color.Wheat;
             this.change_btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.change_btn.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.change_btn.Location = new System.Drawing.Point(118, 431);
+            this.change_btn.Location = new System.Drawing.Point(117, 498);
             this.change_btn.Name = "change_btn";
             this.change_btn.Size = new System.Drawing.Size(94, 32);
             this.change_btn.TabIndex = 12;
@@ -219,7 +222,7 @@
             this.DELETE_btn.BackColor = System.Drawing.Color.Wheat;
             this.DELETE_btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DELETE_btn.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.DELETE_btn.Location = new System.Drawing.Point(118, 469);
+            this.DELETE_btn.Location = new System.Drawing.Point(117, 536);
             this.DELETE_btn.Name = "DELETE_btn";
             this.DELETE_btn.Size = new System.Drawing.Size(94, 32);
             this.DELETE_btn.TabIndex = 13;
@@ -232,7 +235,7 @@
             this.DELETEALL_btn.BackColor = System.Drawing.Color.Tomato;
             this.DELETEALL_btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DELETEALL_btn.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.DELETEALL_btn.Location = new System.Drawing.Point(109, 507);
+            this.DELETEALL_btn.Location = new System.Drawing.Point(108, 574);
             this.DELETEALL_btn.Name = "DELETEALL_btn";
             this.DELETEALL_btn.Size = new System.Drawing.Size(110, 32);
             this.DELETEALL_btn.TabIndex = 14;
@@ -273,12 +276,51 @@
             this.IMAGESOURCE_lbl.TabIndex = 17;
             this.IMAGESOURCE_lbl.Text = "Image Source";
             // 
+            // CB_lbl
+            // 
+            this.CB_lbl.AutoSize = true;
+            this.CB_lbl.BackColor = System.Drawing.Color.Wheat;
+            this.CB_lbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CB_lbl.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.CB_lbl.Location = new System.Drawing.Point(107, 349);
+            this.CB_lbl.Name = "CB_lbl";
+            this.CB_lbl.Size = new System.Drawing.Size(114, 35);
+            this.CB_lbl.TabIndex = 19;
+            this.CB_lbl.Text = "Category";
+            // 
+            // CATEGORY_cb
+            // 
+            this.CATEGORY_cb.BackColor = System.Drawing.Color.Wheat;
+            this.CATEGORY_cb.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.CATEGORY_cb.FormattingEnabled = true;
+            this.CATEGORY_cb.Location = new System.Drawing.Point(13, 400);
+            this.CATEGORY_cb.Name = "CATEGORY_cb";
+            this.CATEGORY_cb.Size = new System.Drawing.Size(303, 32);
+            this.CATEGORY_cb.TabIndex = 20;
+            this.CATEGORY_cb.SelectedIndexChanged += new System.EventHandler(this.CATEGORY_cb_SelectedIndexChanged);
+            // 
+            // CLEAR_btn
+            // 
+            this.CLEAR_btn.BackColor = System.Drawing.Color.DarkOrange;
+            this.CLEAR_btn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CLEAR_btn.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.CLEAR_btn.Location = new System.Drawing.Point(12, 565);
+            this.CLEAR_btn.Name = "CLEAR_btn";
+            this.CLEAR_btn.Size = new System.Drawing.Size(37, 32);
+            this.CLEAR_btn.TabIndex = 21;
+            this.CLEAR_btn.Text = "X";
+            this.CLEAR_btn.UseVisualStyleBackColor = false;
+            this.CLEAR_btn.Click += new System.EventHandler(this.CLEAR_btn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BlanchedAlmond;
             this.ClientSize = new System.Drawing.Size(1258, 609);
+            this.Controls.Add(this.CLEAR_btn);
+            this.Controls.Add(this.CATEGORY_cb);
+            this.Controls.Add(this.CB_lbl);
             this.Controls.Add(this.IMAGESOURCE_lbl);
             this.Controls.Add(this.IMAGESOURCE_textbox);
             this.Controls.Add(this.IMAGECANVAS_picbox);
@@ -330,6 +372,9 @@
         private System.Windows.Forms.PictureBox IMAGECANVAS_picbox;
         private System.Windows.Forms.TextBox IMAGESOURCE_textbox;
         private System.Windows.Forms.Label IMAGESOURCE_lbl;
+        private System.Windows.Forms.Label CB_lbl;
+        private System.Windows.Forms.ComboBox CATEGORY_cb;
+        private System.Windows.Forms.Button CLEAR_btn;
     }
 }
 
